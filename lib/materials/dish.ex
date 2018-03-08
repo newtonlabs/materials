@@ -6,6 +6,8 @@ defmodule Materials.Dish do
 
   alias Materials.{Repo, Ingredient}
 
+  @derive {Poison.Encoder, except: [:__meta__]}
+
   schema "dishes" do
     field(:name)
     field(:body)

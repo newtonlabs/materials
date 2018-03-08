@@ -32,5 +32,7 @@
         <a href="https://twitter.com/elixirphoenix">@elixirphoenix</a>
       </li>
     </ul>
+    <div id="messages"></div>
+    <input id="chat-input" type="text"></input>
   </div>
 </div>

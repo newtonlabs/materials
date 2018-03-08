@@ -4,6 +4,8 @@ defmodule Materials.Ingredient do
 
   alias Materials.{Ingredient}
 
+  @derive {Poison.Encoder, except: [:__meta__]}
+
   schema "ingredients" do
     field(:name)
     field(:frequency, :string, default: "often")
