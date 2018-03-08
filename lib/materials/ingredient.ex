@@ -2,7 +2,7 @@ defmodule Materials.Ingredient do
   use Ecto.Schema
   import Ecto.Changeset
 
-  alias Materials.{Ingredient, Dish}
+  alias Materials.{Ingredient}
 
   schema "ingredients" do
     field(:name)

@@ -1,6 +1,6 @@
 defmodule Materials.Dishes do
   import Ecto.Query, warn: false
-  alias Materials.{Repo, Ingredient, Dish}
+  alias Materials.{Repo, Dish}
 
   def create_dish(attrs \\ %{}) do
     %Dish{}

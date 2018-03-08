@@ -1,6 +1,5 @@
 defmodule Materials.Dish do
   use Ecto.Schema
-  use Timex
 
   import Ecto.Changeset
   import Ecto.Query
@@ -43,7 +42,7 @@ defmodule Materials.Dish do
   def insert_and_get_all(names) do
     maps =
       Enum.map(names, fn name ->
-        %{name: name, inserted_at: Timex.now(), updated_at: Timex.now()}
+        %{name: name, inserted_at: DateTime.utc_now(), updated_at: DateTime.utc_now()}
       end)
 
     Repo.insert_all(Ingredient, maps, on_conflict: :nothing)

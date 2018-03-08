@@ -15,7 +15,6 @@ defmodule MaterialsCli.Data do
       |> add_meals()
 
     shopping_list(Materials.Meals.list_meals())
-    |> Enum.map(fn d -> Wunderlist.add_task(preferred_list_id(), d) end)
   end
 
   def clean_up() do
@@ -56,8 +55,6 @@ defmodule MaterialsCli.Data do
     |> Enum.filter(fn {status, _} -> status == :error end)
     |> Enum.concat(errors)
   end
-
-  def preferred_list_id, do: Application.get_env(:material, :list_id)
 
   def shopping_list(meals) do
     meals

@@ -10,7 +10,8 @@ defmodule Materials.Mixfile do
       compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
-      deps: deps()
+      deps: deps(),
+      escript: [main_module: Materials]
     ]
   end
 
@@ -45,7 +46,6 @@ defmodule Materials.Mixfile do
       {:nimble_csv, "~> 0.3"},
       {:oauth2, "~> 0.9"},
       {:httpotion, "~> 3.1.0"},
-      {:timex, "~> 3.1"},
       {:mix_test_watch, "~> 0.5", only: :dev, runtime: false},
       {:ex_doc, "~> 0.16", only: :dev, runtime: false}
     ]

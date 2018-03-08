@@ -36,8 +36,10 @@ defmodule Materials.Wunderlist do
     OAuth2.Client.authorize_url!(client(), state: "alfkjadslfajksdf")
   end
 
-  def get_token!(params \\ [], headers \\ [], opts \\ []) do
-    OAuth2.Client.get_token!(client(), params, headers, opts)
+  def get_token!(code, params \\ [], headers \\ [], opts \\ []) do
+    client()
+    |> OAuth2.Client.put_param(:code, code)
+    |> OAuth2.Client.get_token!(params, headers, opts)
   end
 
   def authorize_url(client, params) do
@@ -47,6 +49,7 @@ defmodule Materials.Wunderlist do
   def get_token(client, params, headers) do
     client
     |> OAuth2.Client.put_param(:client_secret, client.client_secret)
+    |> OAuth2.Client.put_param(:code, "0e2aea867363b53cf700")
     |> OAuth2.Client.put_header("accept", "application/json")
     |> OAuth2.Strategy.AuthCode.get_token(params, headers)
   end
@@ -59,9 +62,18 @@ defmodule Materials.Wunderlist do
     get("tasks", query: %{list_id: list_id}).body()
   end
 
-  def add_task(list_id, title) do
+  def add_task(list_id, title, options) do
     body = %{list_id: list_id, title: title}
-    # post("tasks", body: Poison.encode!(body))
+    commit_task(options, body)
+  end
+
+  def commit_task(options, body) do
+    if options[:commit] do
+      response = post("tasks", body: Poison.encode!(body))
+      {body, response}
+    else
+      {body, nil}
+    end
   end
 
   def client_id do
@@ -73,6 +85,6 @@ defmodule Materials.Wunderlist do
   end
 
   def access_token do
-    Application.get_env(:materials, :access_token)
+    Application.get_env(:materials, :wunderlist_access_token)
   end
 end
