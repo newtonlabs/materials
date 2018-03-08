@@ -3,17 +3,25 @@ require IEx
 defmodule MaterialsCli.Data do
   NimbleCSV.define(MyParser, separator: "\t", escape: "\"")
 
-  alias Materials.{Ingredients, Dishes, Meals, Wunderlist}
+  alias Materials.{Ingredients, Dishes, Meals, Wunderlist, Repo}
 
   def load_board_from_csv do
-    # {:ok, board} = Board.start_link("test")
-    []
-    |> add_ingredients()
-    |> add_dishes()
-    |> add_meals()
+    clean_up()
+
+    _errors =
+      []
+      |> add_ingredients()
+      |> add_dishes()
+      |> add_meals()
 
     shopping_list(Materials.Meals.list_meals())
     |> Enum.map(fn d -> Wunderlist.add_task(preferred_list_id(), d) end)
+  end
+
+  def clean_up() do
+    Repo.delete_all(Materials.Meal)
+    Repo.delete_all(Materials.Dish)
+    Repo.delete_all(Materials.Ingredient)
   end
 
   def add_ingredients(errors) do

@@ -14,8 +14,7 @@ defmodule Materials.Meal do
       :dishes,
       Dish,
       join_through: "meals_dishes",
-      on_replace: :delete,
-      on_delete: :delete_all
+      on_replace: :delete
     )
 
     timestamps()
