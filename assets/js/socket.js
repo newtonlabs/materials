@@ -55,30 +55,53 @@ socket.connect()
 
 // Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("room:lobby", {})
-let chatInput = document.querySelector("#chat-input")
 let messagesContainer = document.querySelector("#messages")
-let reducer = (accumulator, currentValue) => accumulator.concat(`<li>${currentValue.name}</li> `)
 
-chatInput.addEventListener("keypress", event => {
-  if(event.keyCode === 13){
-    channel.push("new_msg", {body: chatInput.value})
-    chatInput.value = ""
-  }
-})
-
-channel.on("new_msg", payload => {
-  let messageItem = document.createElement("li")
-  if (Array.isArray(payload.body)) {
-    messageItem.innerHTML = payload.body.reduce(reducer, "")
-  }
-  else{
-    messageItem.innerText = `[${Date()}] ${payload.body}`
-  }
+// Configure channels
+channel.on("dish", payload => {
+  let text = `${payload.body.action} ${payload.body.id}`
+  let messageItem = document.createElement("p")
+  messageItem.innerText = `[${Date()}] ${text}`
   messagesContainer.appendChild(messageItem)
 })
 
 channel.join()
-  .receive("ok", resp => { console.log("Joined successfully", resp) })
+  .receive("ok", payload => {
+    console.log("Joined successfully")
+  })
   .receive("error", resp => { console.log("Unable to join", resp) })
+
+// Configure drag and drop
+dragula([document.querySelector('#dishes'), document.querySelector('#meals')], {
+  copy: true
+})
+.on('drop', function (card, container) {
+  cardAction(card, container);
+});
+
+dragula([document.getElementById('meals')], {
+  removeOnSpill: true
+});
+
+// Helper Functions
+function cardAction(card, container) {
+  if (container === null) {
+    channel.push("dish", dishPayload("remove", card));
+  }
+  else if (container.id === "meals") {
+    channel.push("dish", dishPayload("add", card));
+  }
+}
+
+function dishPayload(action, card) {
+  return {
+    action: action,
+    id: stringId(card.id)
+  }
+}
+
+function stringId(dishString) {
+  return dishString.split("-")[1];
+}
 
 export default socket

@@ -14,5 +14,9 @@ defmodule Materials.Dishes do
     |> Repo.update()
   end
 
+  def list_dishes() do
+    Repo.all(Dish) |> Repo.preload(:ingredients)
+  end
+
   def get_dish!(id), do: Repo.get!(Dish, id) |> Materials.Repo.preload([:ingredients])
 end
