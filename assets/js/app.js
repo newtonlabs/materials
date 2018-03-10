@@ -12,6 +12,12 @@
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
 import "phoenix_html"
+import "dragula"
+import "d3"
+import "popper.js"
+import "bootstrap"
+import "jquery"
+
 
 // Import local files
 //
@@ -19,3 +25,4 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 import socket from "./socket"
+import "./drag"

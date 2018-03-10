@@ -7,14 +7,12 @@ defmodule MaterialsCli.Data do
 
   def load_board_from_csv do
     clean_up()
+    {:ok, meal} = Meals.create_meal(%{name: "My Meal Plan", dishes: []})
 
-    _errors =
+    errors =
       []
       |> add_ingredients()
       |> add_dishes()
-      |> add_meals()
-
-    shopping_list(Materials.Meals.list_meals())
   end
 
   def clean_up() do
@@ -44,29 +42,4 @@ defmodule MaterialsCli.Data do
     |> Enum.filter(fn {status, _} -> status == :error end)
     |> Enum.concat(errors)
   end
-
-  def add_meals(errors) do
-    "data/planner.tsv"
-    |> File.stream!()
-    |> MyParser.parse_stream()
-    |> Stream.map(fn [name, csv_dishes] ->
-      Meals.create_meal(%{name: name, dishes: csv_dishes})
-    end)
-    |> Enum.filter(fn {status, _} -> status == :error end)
-    |> Enum.concat(errors)
-  end
-
-  def shopping_list(meals) do
-    meals
-    |> Enum.flat_map(fn meal -> Enum.flat_map(meal.dishes, fn dish -> dish.ingredients end) end)
-    |> Enum.group_by(fn i -> task_name(i) end, fn i -> task_name(i) end)
-    |> Enum.map(fn {key, value} -> task_quantity(key, length(value)) end)
-  end
-
-  def task_name(ingredient) do
-    "#{ingredient.location} - #{ingredient.name}"
-  end
-
-  def task_quantity(task, quantity) when quantity > 1, do: "#{task} (#{quantity})"
-  def task_quantity(task, _), do: "#{task}"
 end

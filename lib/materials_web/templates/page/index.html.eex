@@ -1,38 +1,65 @@
-<div class="jumbotron">
-  <h2><%= gettext "Welcome to %{name}!", name: "Phoenix" %></h2>
-  <p class="lead">A productive web framework that<br />does not compromise speed and maintainability.</p>
+<div class="container">
+  <div class="row">
+    <div class="col-sm" id="dishes">
+      <h3>Dishes</h3>
+      <%= for dish <- @dishes do %>
+        <div class="card border-primary mb-3" style="max-width: 18rem;" id="dish-<%=dish.id%>">
+          <div class="card-body grabbable" data-toggle="modal" data-target="#exampleModal">
+            <h5 class="card-title text-primary"><%= dish.name %> </h5>
+            <p class="card-text text-secondary">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+        </div>
+      <% end %>
+      <p> Add Item </p>
+    </div>
+    <div class="col-sm" id="meals">
+      <h3>Weekly Plan</h3>
+      <%= for meal <- @meals do %>
+        <div class="card border-primary mb-3" style="max-width: 18rem;" id="dish-<%=meal.id%>">
+          <div class="card-body grabbable">
+            <h5 class="card-title text-primary"><%= meal.name %> </h5>
+            <p class="card-text text-secondary">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <div class="col-sm">
+      <h3>Shopping List</h3>
+        <div class="card border-primary mb-3" style="max-width: 18rem;">
+          <div class="card-body" id="shopping_list">
+            <%= for task <- @shopping_list do %>
+            <p class="card-text text-secondary"> <%= task.name %> </p>
+            <% end %>
+          </div>
+        </div>
+        <div> <a href="#" class="btn btn-primary">Send to Wunderlist</a> </div>
+    </div>
+  </div>
 </div>
 
-<div class="row marketing">
-  <div class="col-lg-6">
-    <h4>Resources</h4>
-    <ul>
-      <li>
-        <a href="http://phoenixframework.org/docs/overview">Guides</a>
-      </li>
-      <li>
-        <a href="https://hexdocs.pm/phoenix">Docs</a>
-      </li>
-      <li>
-        <a href="https://github.com/phoenixframework/phoenix">Source</a>
-      </li>
-    </ul>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Share Dish</button>
+      </div>
+    </div>
   </div>
+</div>
 
-  <div class="col-lg-6">
-    <h4>Help</h4>
-    <ul>
-      <li>
-        <a href="http://groups.google.com/group/phoenix-talk">Mailing list</a>
-      </li>
-      <li>
-        <a href="http://webchat.freenode.net/?channels=elixir-lang">#elixir-lang on freenode IRC</a>
-      </li>
-      <li>
-        <a href="https://twitter.com/elixirphoenix">@elixirphoenix</a>
-      </li>
-    </ul>
-    <div id="messages"></div>
-    <input id="chat-input" type="text"></input>
+<div class="row">
+  <div class="col-12 bg-light">
+    <div id="messages" style="font-family:monospace;"></div>
   </div>
 </div>

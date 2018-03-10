@@ -2,37 +2,46 @@ require IEx
 
 defmodule MaterialsWeb.RoomChannel do
   use Phoenix.Channel
+  alias Materials.{Dishes, Meals, Repo, Meal}
 
   def join("room:lobby", _message, socket) do
-    {:ok, socket}
+    {:ok, %{}, socket}
+    # {:ok, shopping_list(), socket}
   end
 
   def join("room:" <> _private_room_id, _params, _socket) do
     {:error, %{reason: "unauthorized"}}
   end
 
-  def handle_in("new_msg", %{"body" => body}, socket) do
-    payload = look_for_rooms(body)
-    broadcast!(socket, "new_msg", %{body: payload})
+  def handle_in("dish", %{"action" => "add", "id" => id}, socket) do
+    dish = Dishes.get_dish!(id)
+    meal = get_meal()
+
+    {:ok, _meal} = Meals.update_meal(meal, %{dishes: [dish] ++ meal.dishes})
+
+    broadcast!(socket, "dish", shopping_list())
     {:noreply, socket}
   end
 
-  def look_for_rooms(body) when body == "meals" do
-    Materials.Meals.list_meals()
+  def handle_in("dish", %{"action" => "remove", "id" => id}, socket) do
+    meal = get_meal()
+
+    dishes =
+      meal.dishes
+      |> Enum.filter(&("#{&1.id}" != id))
+
+    {:ok, _meal} = Meals.update_meal(meal, %{dishes: dishes})
+
+    broadcast!(socket, "dish", shopping_list())
+    {:noreply, socket}
   end
 
-  def look_for_rooms(body), do: body
-
-  def encode(%{__struct__: _} = struct, options) do
-    map =
-      struct
-      |> Map.from_struct()
-      |> sanitize_map
-
-    Poison.Encoder.Map.encode(map, options)
+  def get_meal do
+    List.first(Repo.all(Meal)) |> Repo.preload([:dishes])
   end
 
-  defp sanitize_map(map) do
-    Map.drop(map, [:__meta__, :__struct__])
+  def shopping_list do
+    # TODO this is broken, need to get the specfic meal and fix this
+    %{list: Meals.list_meals() |> Meals.shopping_list()}
   end
 end

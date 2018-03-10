@@ -19,3 +19,10 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
   * Mailing list: http://groups.google.com/group/phoenix-talk
   * Source: https://github.com/phoenixframework/phoenix
 # materials
+
+# Commands
+
+```
+# broadcast from iex:
+iex> MaterialsWeb.Endpoint.broadcast("room:lobby", "new_msg", %{body: "hi there"})
+```

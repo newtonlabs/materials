@@ -1,3 +1,6 @@
+// http://terrcin.io/2017/04/16/phoenix-1.3-with_bootstrap_4_and_font_awesome/
+// Great help for below
+
 exports.config = {
   // See http://brunch.io/#documentation for docs.
   files: {
@@ -20,7 +23,10 @@ exports.config = {
       // }
     },
     stylesheets: {
-      joinTo: "css/app.css"
+      joinTo: "css/app.css",
+      order: {
+        after: ["priv/static/css/app.scss"] // concat app.scss last
+      },
     },
     templates: {
       joinTo: "js/app.js"
@@ -47,6 +53,18 @@ exports.config = {
     babel: {
       // Do not use ES6 compiler in vendor code
       ignore: [/vendor/]
+    },
+    sass: {
+      options: {
+        includePaths: ["node_modules/bootstrap/scss", "node_modules/font-awesome/scss"], // tell sass-brunch where to look for files to @import
+        precision: 8 // minimum precision required by bootstrap
+      }
+    },
+    copycat: {
+      "fonts": [
+        "node_modules/font-awesome/fonts"
+        // "node_modules/bootstrap-sass/assets/fonts/bootstrap",
+      ] // copy these files into priv/static/fonts/
     }
   },
 
@@ -57,6 +75,18 @@ exports.config = {
   },
 
   npm: {
-    enabled: true
+    enabled: true,
+    globals: { // Bootstrap JavaScript requires both '$', 'jQuery', and Tether in global scope
+      $: 'jquery',
+      jQuery: 'jquery',
+      Popper: 'popper.js',
+      bootstrap: 'bootstrap',
+      dragula: 'dragula',
+      d3: 'd3'
+    }
+    // styles: {
+    //   "bootstrap-table": ["dist/bootstrap-table.css"],
+    //   "jquery-ui": ["themes/base/all.css"]
+    // } // included these styles into the build
   }
 };
