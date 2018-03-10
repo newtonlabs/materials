@@ -1,78 +1,30 @@
-// NOTE: The contents of this file will only be executed if
-// you uncomment its entry in "assets/js/app.js".
-
-// To use Phoenix channels, the first step is to import Socket
-// and connect at the socket path in "lib/web/endpoint.ex":
+/*
+ * Setup Sockets
+ */
 import {Socket} from "phoenix"
 
 let socket = new Socket("/socket", {params: {token: window.userToken}})
-
-// When you connect, you'll often need to authenticate the client.
-// For example, imagine you have an authentication plug, `MyAuth`,
-// which authenticates the session and assigns a `:current_user`.
-// If the current user exists you can assign the user's token in
-// the connection for use in the layout.
-//
-// In your "lib/web/router.ex":
-//
-//     pipeline :browser do
-//       ...
-//       plug MyAuth
-//       plug :put_user_token
-//     end
-//
-//     defp put_user_token(conn, _) do
-//       if current_user = conn.assigns[:current_user] do
-//         token = Phoenix.Token.sign(conn, "user socket", current_user.id)
-//         assign(conn, :user_token, token)
-//       else
-//         conn
-//       end
-//     end
-//
-// Now you need to pass this token to JavaScript. You can do so
-// inside a script tag in "lib/web/templates/layout/app.html.eex":
-//
-//     <script>window.userToken = "<%= assigns[:user_token] %>";</script>
-//
-// You will need to verify the user token in the "connect/2" function
-// in "lib/web/channels/user_socket.ex":
-//
-//     def connect(%{"token" => token}, socket) do
-//       # max_age: 1209600 is equivalent to two weeks in seconds
-//       case Phoenix.Token.verify(socket, "user socket", token, max_age: 1209600) do
-//         {:ok, user_id} ->
-//           {:ok, assign(socket, :user, user_id)}
-//         {:error, reason} ->
-//           :error
-//       end
-//     end
-//
-// Finally, pass the token on connect as below. Or remove it
-// from connect if you don't care about authentication.
-
 socket.connect()
 
-// Now that you are connected, you can join channels with a topic:
 let channel = socket.channel("room:lobby", {})
 let messagesContainer = document.querySelector("#messages")
 
-// Configure channels
+// Join the channel
+channel.join()
+  .receive("ok", payload => {
+  })
+  .receive("error", resp => {
+    console.log("Unable to join", resp)
+  })
+
+// Update the ingredients when dish changes arrive on the channel
 channel.on("dish", payload => {
-  // let text = `${payload.body.action} ${payload.body.id}`
-  // let messageItem = document.createElement("p")
-  // messageItem.innerText = `[${Date()}] ${text}`
-  // messagesContainer.appendChild(messageItem)
   updateIngredients(payload)
 })
 
-channel.join()
-  .receive("ok", payload => {
-    console.log("Joined successfully")
-  })
-  .receive("error", resp => { console.log("Unable to join", resp) })
-
-// Configure drag and drop
+/*
+ * Configure the Drag and Drop features
+ */
 dragula([document.querySelector('#dishes'), document.querySelector('#meals')], {
   copy: true
 })
@@ -84,30 +36,31 @@ dragula([document.getElementById('meals')], {
   removeOnSpill: true
 });
 
-// React with D3
+/*
+ * Dynamically update the DOM based on data from the channel listeners
+ */
 function updateIngredients(data) {
-  console.log("updating the ingredients", data);
+  let ingredients = d3.select("#shopping_list")
+    .selectAll("p")
+    .data(data.list, (d) => (d && d.key))
+    .text((d) => d.name)
+    .attr('class', 'card-text text-secondary')
+
+  ingredients.enter().append("p")
+    .text((d) => d.name)
+    .attr('class', 'card-text text-secondary');
+
+  ingredients.exit().remove();
 }
 
-// Helper Functions
+/*
+ * Send messages to the channel based on drag and drop actions
+ */
 function cardAction(card, container) {
-  if (container === null) {
-    channel.push("dish", dishPayload("remove", card));
-  }
-  else if (container.id === "meals") {
-    channel.push("dish", dishPayload("add", card));
-  }
+  const action = container === null ? "remove" : "add";
+  channel.push("dish", dishPayload(action, card));
 }
-
-function dishPayload(action, card) {
-  return {
-    action: action,
-    id: stringId(card.id)
-  }
-}
-
-function stringId(dishString) {
-  return dishString.split("-")[1];
-}
+const dishPayload = (action, card) => ({action: action, id: stringId(card.id)})
+const stringId = (dishString) => dishString.split("-")[1]
 
 export default socket

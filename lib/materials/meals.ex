@@ -25,15 +25,18 @@ defmodule Materials.Meals do
     Repo.all(Meal) |> Materials.Repo.preload(dishes: :ingredients)
   end
 
+  # TODO: this really needs some cleanup work
   def shopping_list(meals) do
     meals
     |> Enum.flat_map(fn meal -> Enum.flat_map(meal.dishes, fn dish -> dish.ingredients end) end)
-    |> Enum.group_by(fn i -> task_name(i) end, fn i -> task_name(i) end)
-    |> Enum.map(fn {key, value} -> task_quantity(key, length(value)) end)
+    |> Enum.group_by(&task_name/1, &task_name/1)
+    |> Enum.map(fn {{id, name}, value} ->
+      %{id: id, name: task_quantity(name, length(value))}
+    end)
   end
 
   def task_name(ingredient) do
-    "#{ingredient.location} - #{ingredient.name}"
+    {ingredient.id, "#{ingredient.location} - #{ingredient.name}"}
   end
 
   def task_quantity(task, quantity) when quantity > 1, do: "#{task} (#{quantity})"

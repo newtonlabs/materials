@@ -23,19 +23,16 @@
         </div>
       <% end %>
     </div>
-    <div class="col-sm" id="shopping_list">
+    <div class="col-sm">
       <h3>Shopping List</h3>
         <div class="card border-primary mb-3" style="max-width: 18rem;">
-          <div class="card-body">
+          <div class="card-body" id="shopping_list">
             <%= for task <- @shopping_list do %>
-            <p class="card-text text-secondary">
-              &nbsp; <input type="checkbox" class="form-check-input" id="exampleCheck1">
-              <%= task %>
-            </p>
+            <p class="card-text text-secondary"> <%= task.name %> </p>
             <% end %>
-           <a href="#" class="btn btn-primary">Send to Wunderlist</a>
           </div>
         </div>
+        <div> <a href="#" class="btn btn-primary">Send to Wunderlist</a> </div>
     </div>
   </div>
 </div>
