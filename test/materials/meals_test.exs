@@ -56,8 +56,7 @@ defmodule MaterialsTest do
       dish2 = Dishes.get_dish!(dish1.id)
       assert dish1 == dish2
 
-      assert {:ok, %Dish{} = dish3} =
-               Dishes.create_dish(%{name: "dish name 2", ingredients: "a,b,c"})
+      assert {:ok, %Dish{}} = Dishes.create_dish(%{name: "dish name 2", ingredients: "a,b,c"})
 
       meal1 = meal_fixture() |> Repo.preload(:dishes)
       meal2 = List.first(Repo.all(Meal)) |> Repo.preload([:dishes])

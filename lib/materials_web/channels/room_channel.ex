@@ -17,21 +17,20 @@ defmodule MaterialsWeb.RoomChannel do
     dish = Dishes.get_dish!(id)
     meal = get_meal()
 
-    {:ok, meal} = Meals.update_meal(meal, %{dishes: [dish] ++ meal.dishes})
+    {:ok, _meal} = Meals.update_meal(meal, %{dishes: [dish] ++ meal.dishes})
 
     broadcast!(socket, "dish", shopping_list())
     {:noreply, socket}
   end
 
   def handle_in("dish", %{"action" => "remove", "id" => id}, socket) do
-    dish = Dishes.get_dish!(id)
     meal = get_meal()
 
     dishes =
       meal.dishes
       |> Enum.filter(&("#{&1.id}" != id))
 
-    {:ok, meal} = Meals.update_meal(meal, %{dishes: dishes})
+    {:ok, _meal} = Meals.update_meal(meal, %{dishes: dishes})
 
     broadcast!(socket, "dish", shopping_list())
     {:noreply, socket}
