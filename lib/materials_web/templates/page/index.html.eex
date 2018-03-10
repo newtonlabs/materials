@@ -4,7 +4,7 @@
       <h3>Dishes</h3>
       <%= for dish <- @dishes do %>
         <div class="card border-primary mb-3" style="max-width: 18rem;" id="dish-<%=dish.id%>">
-          <div class="card-body grabbable">
+          <div class="card-body grabbable" data-toggle="modal" data-target="#exampleModal">
             <h5 class="card-title text-primary"><%= dish.name %> </h5>
             <p class="card-text text-secondary">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
           </div>
@@ -36,6 +36,27 @@
            <a href="#" class="btn btn-primary">Send to Wunderlist</a>
           </div>
         </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Share Dish</button>
+      </div>
     </div>
   </div>
 </div>

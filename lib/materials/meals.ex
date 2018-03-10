@@ -1,3 +1,5 @@
+require IEx
+
 defmodule Materials.Meals do
   import Ecto.Query, warn: false
   alias Materials.{Repo, Meal}
@@ -17,7 +19,7 @@ defmodule Materials.Meals do
   def get_meal!(id),
     do:
       Repo.get!(Meal, id)
-      |> Materials.Repo.preload(dishes: :ingredients)
+      |> Repo.preload(dishes: :ingredients)
 
   def list_meals do
     Repo.all(Meal) |> Materials.Repo.preload(dishes: :ingredients)

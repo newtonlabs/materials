@@ -7,15 +7,12 @@ defmodule MaterialsCli.Data do
 
   def load_board_from_csv do
     clean_up()
+    {:ok, meal} = Meals.create_meal(%{name: "My Meal Plan", dishes: []})
 
-    _errors =
+    errors =
       []
       |> add_ingredients()
       |> add_dishes()
-      |> add_meals()
-
-    Meals.list_meals()
-    |> Meals.shopping_list()
   end
 
   def clean_up() do
@@ -41,17 +38,6 @@ defmodule MaterialsCli.Data do
     |> MyParser.parse_stream()
     |> Stream.map(fn [dish_name, csv_ingredients] ->
       Dishes.create_dish(%{name: dish_name, ingredients: csv_ingredients})
-    end)
-    |> Enum.filter(fn {status, _} -> status == :error end)
-    |> Enum.concat(errors)
-  end
-
-  def add_meals(errors) do
-    "data/planner.tsv"
-    |> File.stream!()
-    |> MyParser.parse_stream()
-    |> Stream.map(fn [name, csv_dishes] ->
-      Meals.create_meal(%{name: name, dishes: csv_dishes})
     end)
     |> Enum.filter(fn {status, _} -> status == :error end)
     |> Enum.concat(errors)

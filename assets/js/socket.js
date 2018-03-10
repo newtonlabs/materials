@@ -59,10 +59,11 @@ let messagesContainer = document.querySelector("#messages")
 
 // Configure channels
 channel.on("dish", payload => {
-  let text = `${payload.body.action} ${payload.body.id}`
-  let messageItem = document.createElement("p")
-  messageItem.innerText = `[${Date()}] ${text}`
-  messagesContainer.appendChild(messageItem)
+  // let text = `${payload.body.action} ${payload.body.id}`
+  // let messageItem = document.createElement("p")
+  // messageItem.innerText = `[${Date()}] ${text}`
+  // messagesContainer.appendChild(messageItem)
+  updateIngredients(payload)
 })
 
 channel.join()
@@ -82,6 +83,11 @@ dragula([document.querySelector('#dishes'), document.querySelector('#meals')], {
 dragula([document.getElementById('meals')], {
   removeOnSpill: true
 });
+
+// React with D3
+function updateIngredients(data) {
+  console.log("updating the ingredients", data);
+}
 
 // Helper Functions
 function cardAction(card, container) {
