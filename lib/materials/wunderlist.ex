@@ -63,7 +63,7 @@ defmodule Materials.Wunderlist do
   end
 
   def add_task(list_id, title, options) do
-    body = %{list_id: list_id, title: title}
+    body = %{list_id: list_id, title: title.name}
     commit_task(options, body)
   end
 

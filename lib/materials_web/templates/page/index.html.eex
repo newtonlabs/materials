@@ -1,38 +1,36 @@
-<div class="container">
+<div class="container-fluid my-background">
   <div class="row">
     <div class="col-sm" id="dishes">
-      <h3>Dishes</h3>
+      <h3 class="text-white">Dishes</h3>
       <%= for dish <- @dishes do %>
         <div class="card border-primary mb-3" style="max-width: 18rem;" id="dish-<%=dish.id%>">
           <div class="card-body grabbable" data-toggle="modal" data-target="#exampleModal">
-            <h5 class="card-title text-primary"><%= dish.name %> </h5>
-            <p class="card-text text-secondary">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <p class="card-title text-dark"><%= dish.name %> </p>
           </div>
         </div>
       <% end %>
       <p> Add Item </p>
     </div>
     <div class="col-sm" id="meals">
-      <h3>Weekly Plan</h3>
+      <h3 class="text-white">Weekly Plan</h3>
       <%= for meal <- @meals do %>
         <div class="card border-primary mb-3" style="max-width: 18rem;" id="dish-<%=meal.id%>">
           <div class="card-body grabbable">
-            <h5 class="card-title text-primary"><%= meal.name %> </h5>
-            <p class="card-text text-secondary">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <p class="card-title text-dark"><%= meal.name %> </p>
           </div>
         </div>
       <% end %>
     </div>
     <div class="col-sm">
-      <h3>Shopping List</h3>
+      <h3 class="text-white">Shopping List</h3>
         <div class="card border-primary mb-3" style="max-width: 18rem;">
           <div class="card-body" id="shopping_list">
             <%= for task <- @shopping_list do %>
-            <p class="card-text text-secondary"> <%= task.name %> </p>
+            <p class="card-text text-dark"> <%= task.name %> </p>
             <% end %>
           </div>
         </div>
-        <div> <a href="#" class="btn btn-primary">Send to Wunderlist</a> </div>
+        <div> <a href="#" class="btn btn-success">Send to Wunderlist</a> </div>
     </div>
   </div>
 </div>

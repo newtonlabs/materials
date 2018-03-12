@@ -44,7 +44,12 @@ defmodule Materials.Dish do
   def insert_and_get_all(names) do
     maps =
       Enum.map(names, fn name ->
-        %{name: name, inserted_at: DateTime.utc_now(), updated_at: DateTime.utc_now()}
+        %{
+          name: name,
+          inserted_at: DateTime.utc_now(),
+          updated_at: DateTime.utc_now(),
+          location: "Kroger"
+        }
       end)
 
     Repo.insert_all(Ingredient, maps, on_conflict: :nothing)
