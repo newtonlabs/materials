@@ -1,9 +1,10 @@
 <div class="container-fluid my-background">
   <div class="row">
+
     <div class="col-sm" id="dishes">
-      <h3 class="text-white">Dishes</h3>
+      <h3 class="text-dark">Dishes</h3>
       <%= for dish <- @dishes do %>
-        <div class="card border-primary mb-3" style="max-width: 18rem;" id="dish-<%=dish.id%>">
+        <div class="card border-primary mb-3" style="max-width: 18rem;" data-dish-id="<%= dish.id %>">
           <div class="card-body grabbable" data-toggle="modal" data-target="#exampleModal">
             <p class="card-title text-dark"><%= dish.name %> </p>
           </div>
@@ -11,27 +12,30 @@
       <% end %>
       <p> Add Item </p>
     </div>
+
     <div class="col-sm" id="meals">
-      <h3 class="text-white">Weekly Plan</h3>
+      <h3 class="text-dark">Weekly Plan</h3>
       <%= for meal <- @meals do %>
-        <div class="card border-primary mb-3" style="max-width: 18rem;" id="dish-<%=meal.id%>">
+        <div class="card border-primary mb-3" style="max-width: 18rem;"  data-dish-id="<%= meal.id %>">
           <div class="card-body grabbable">
             <p class="card-title text-dark"><%= meal.name %> </p>
           </div>
         </div>
       <% end %>
     </div>
+
     <div class="col-sm">
-      <h3 class="text-white">Shopping List</h3>
+      <h3 class="text-dark">Shopping List</h3>
         <div class="card border-primary mb-3" style="max-width: 18rem;">
           <div class="card-body" id="shopping_list">
             <%= for task <- @shopping_list do %>
-            <p class="card-text text-dark"> <%= task.name %> </p>
+            <p class="card-text text-dark" data-ingredient="<%= task.id %>"> <%= task.name %> </p>
             <% end %>
           </div>
         </div>
         <div> <a href="#" class="btn btn-success">Send to Wunderlist</a> </div>
     </div>
+
   </div>
 </div>
 
@@ -53,11 +57,5 @@
         <button type="button" class="btn btn-primary">Share Dish</button>
       </div>
     </div>
-  </div>
-</div>
-
-<div class="row">
-  <div class="col-12 bg-light">
-    <div id="messages" style="font-family:monospace;"></div>
   </div>
 </div>

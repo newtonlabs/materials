@@ -17,7 +17,7 @@ defmodule MaterialsWeb.RoomChannel do
     dish = Dishes.get_dish!(id)
     meal = get_meal()
 
-    {:ok, _meal} = Meals.update_meal(meal, %{dishes: [dish] ++ meal.dishes})
+    {:ok, meal} = Meals.update_meal(meal, %{dishes: [dish] ++ meal.dishes})
 
     broadcast!(socket, "dish", shopping_list())
     {:noreply, socket}
@@ -30,7 +30,7 @@ defmodule MaterialsWeb.RoomChannel do
       meal.dishes
       |> Enum.filter(&("#{&1.id}" != id))
 
-    {:ok, _meal} = Meals.update_meal(meal, %{dishes: dishes})
+    {:ok, meal} = Meals.update_meal(meal, %{dishes: dishes})
 
     broadcast!(socket, "dish", shopping_list())
     {:noreply, socket}
@@ -42,6 +42,11 @@ defmodule MaterialsWeb.RoomChannel do
 
   def shopping_list do
     # TODO this is broken, need to get the specfic meal and fix this
-    %{list: Meals.list_meals() |> Meals.shopping_list()}
+    meal = List.first(Meals.list_meals())
+
+    %{
+      list: Meals.shopping_list([meal]),
+      dishes: meal.dishes
+    }
   end
 end

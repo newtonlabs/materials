@@ -19,7 +19,8 @@ channel.join()
 
 // Update the ingredients when dish changes arrive on the channel
 channel.on("dish", payload => {
-  updateIngredients(payload)
+  updateIngredients(payload);
+  updatePlan(payload)
 })
 
 /*
@@ -42,17 +43,34 @@ dragula([document.getElementById('meals')], {
 function updateIngredients(data) {
   let ingredients = d3.select("#shopping_list")
     .selectAll("p")
-    .data(data.list, (d) => (d && d.key))
-    .text((d) => d.name)
-    .attr('class', 'card-text text-secondary')
+    .data(data.list, (d) => (d && d.key)) // TODO fix this with data api
 
-  ingredients.enter().append("p")
+  ingredients.enter()
+    .append("p")
     .text((d) => d.name)
-    .attr('class', 'card-text text-secondary');
+    .attr('class', 'card-text text-dark');
 
   ingredients.exit().remove();
 }
 
+function updatePlan(data) {
+  let dishes = d3.select("#meals")
+    .selectAll("div.card")
+    .data(data.dishes, function(d) {return (d && d.id) || this.dataset.dishId;});
+
+  dishes.enter()
+    .append("div")
+      .attr('class', 'card border-primary mb-3')
+      .attr('style', 'max-width: 18rem;')
+      .attr('data-dish-id', (d) => d.id)
+    .append("div")
+      .attr('class', 'card-body grabbable')
+    .append("p")
+      .text((d) => d.name)
+      .attr('class', 'card-title text-dark')
+
+  dishes.exit().remove();
+}
 /*
  * Send messages to the channel based on drag and drop actions
  */
@@ -60,7 +78,7 @@ function cardAction(card, container) {
   const action = container === null ? "remove" : "add";
   channel.push("dish", dishPayload(action, card));
 }
-const dishPayload = (action, card) => ({action: action, id: stringId(card.id)})
-const stringId = (dishString) => dishString.split("-")[1]
+const dishPayload = (action, card) => ({ action: action, id: card.dataset.dishId })
+
 
 export default socket
