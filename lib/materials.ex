@@ -8,7 +8,7 @@ defmodule Materials do
   """
 
   # Hard code for now
-  alias Materials.Wunderlist
+  alias Materials.{Wunderlist, Meals}
 
   def main(args) do
     args
@@ -17,7 +17,8 @@ defmodule Materials do
   end
 
   def process(options) do
-    MaterialsCli.Data.load_board_from_csv()
+    Meals.list_meals()
+    |> Meals.shopping_list()
     |> Enum.map(&Wunderlist.add_task(125_473_172, &1, options))
     |> Enum.each(&IO.inspect(&1))
   end

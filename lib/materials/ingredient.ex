@@ -9,7 +9,7 @@ defmodule Materials.Ingredient do
   schema "ingredients" do
     field(:name)
     field(:frequency, :string, default: "often")
-    field(:location)
+    field(:location, :string)
 
     timestamps()
   end
