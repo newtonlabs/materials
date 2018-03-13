@@ -1,8 +1,8 @@
-defmodule Materials.Repo.Migrations.CreateMeals do
+defmodule Materials.Repo.Migrations.CreateTables do
   use Ecto.Migration
 
   def change do
-    create table(:meals) do
+    create table(:tables) do
       add(:name, :string)
 
       timestamps()
