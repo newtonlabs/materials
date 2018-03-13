@@ -26,16 +26,9 @@ channel.on("dish", payload => {
 /*
  * Configure the Drag and Drop features
  */
-dragula([document.querySelector('#dishes'), document.querySelector('#meals')], {
-  copy: true
-})
-.on('drop', function (card, container) {
-  cardAction(card, container);
-});
+dragula([document.querySelector('#dishes'), document.querySelector('#meals')])
+.on('drop', function (card, container) { cardAction(card, container); });
 
-dragula([document.getElementById('meals')], {
-  removeOnSpill: true
-});
 
 /*
  * Dynamically update the DOM based on data from the channel listeners
@@ -71,23 +64,24 @@ function updatePlan(data) {
 }
 
 function htmlCard(meal) {
-  let html = `
-        <div class="card-body grabbable">
-          <button type="button" class="close" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-          <p class="card-title text-dark">${meal.name}</p>
-        </div>
+  return `
+    <div class="card-body grabbable">
+      <p class="card-title text-dark">${meal.name}</p>
+    </div>
   `
-  return html;
 }
 /*
  * Send messages to the channel based on drag and drop actions
  */
 function cardAction(card, container) {
-  const action = container === null ? "remove" : "add";
-  channel.push("dish", dishPayload(action, card));
+  if (container.id === "dishes") {
+    channel.push("dish", dishPayload("remove", card));
+  }
+  if (container.id === "meals") {
+    channel.push("dish", dishPayload("add", card));
+  }
 }
+
 const dishPayload = (action, card) => ({ action: action, id: card.dataset.dishId })
 
 /*
