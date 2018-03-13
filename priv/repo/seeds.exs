@@ -14,5 +14,7 @@ user = Materials.Repo.insert!(%Materials.User{email: "foo@example.com"})
 {:ok, box} = Materials.Boxes.create_box(%{name: "My Recipe Box", user_id: user.id})
 
 # TODO Need to make this more dynamic eventually
-Materials.Sections.create_section(%{name: "Recipe Box", box_id: box.id})
+{:ok, section} = Materials.Sections.create_section(%{name: "Recipe Box", box_id: box.id})
 Materials.Sections.create_section(%{name: "This Week", box_id: box.id})
+
+MaterialsCli.Data.load_board_from_csv(section)
