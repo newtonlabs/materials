@@ -47,8 +47,9 @@ function updateIngredients(data) {
 
   ingredients.enter()
     .append("p")
-    .text((d) => d.name)
-    .attr('class', 'card-text text-dark');
+      .attr('class', 'card-text text-dark')
+    .merge(ingredients)
+      .text((d) => d.name);
 
   ingredients.exit().remove();
 }
@@ -63,13 +64,22 @@ function updatePlan(data) {
       .attr('class', 'card border-primary mb-3')
       .attr('style', 'max-width: 18rem;')
       .attr('data-dish-id', (d) => d.id)
-    .append("div")
-      .attr('class', 'card-body grabbable')
-    .append("p")
-      .text((d) => d.name)
-      .attr('class', 'card-title text-dark')
+    .merge(dishes)
+    .html(function(d) { return htmlCard(d) });
 
   dishes.exit().remove();
+}
+
+function htmlCard(meal) {
+  let html = `
+        <div class="card-body grabbable">
+          <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+          <p class="card-title text-dark">${meal.name}</p>
+        </div>
+  `
+  return html;
 }
 /*
  * Send messages to the channel based on drag and drop actions
@@ -80,5 +90,24 @@ function cardAction(card, container) {
 }
 const dishPayload = (action, card) => ({ action: action, id: card.dataset.dishId })
 
+/*
+ * Modal stuff
+ */
+$('#exampleModal').on('show.bs.modal', function (event) {
+  let click = $(event.relatedTarget);
+  let id = click.data('dish-id');
+  let modal = $(this);
+
+  channel.push(`dish:${id}`)
+    .receive("ok", (reply) => {
+      modal.find('.modal-title').text(reply.name);
+      modal.find('.modal-body').html(composeIngredients(reply.ingredients));
+    })
+})
+
+function composeIngredients(ingredients) {
+  let iStr = ingredients.reduce((acc, val) => acc + `<li>${val.name}</li>`, "")
+  return `<ul>${iStr}</ul>`
+}
 
 export default socket

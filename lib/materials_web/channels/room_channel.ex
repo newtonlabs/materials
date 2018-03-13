@@ -1,3 +1,4 @@
+require Logger
 require IEx
 
 defmodule MaterialsWeb.RoomChannel do
@@ -34,6 +35,15 @@ defmodule MaterialsWeb.RoomChannel do
 
     broadcast!(socket, "dish", shopping_list())
     {:noreply, socket}
+  end
+
+  def handle_in("dish:" <> dish_id, payload, socket) do
+    resp =
+      dish_id
+      |> String.to_integer()
+      |> Dishes.get_dish!()
+
+    {:reply, {:ok, resp}, socket}
   end
 
   def get_meal do
