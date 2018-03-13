@@ -1,8 +1,21 @@
+<div class="container-fluid bg-dark">
+  <div class="row">
+    <div class="col-sm">
+      <h3 class="text-light">Recipe Cards</h3>
+    </div>
+    <div class="col-sm">
+      <h3 class="text-light">Weekly Plan</h3>
+    </div>
+    <div class="col-sm">
+      <h3 class="text-light">Shopping List</h3>
+    </div>
+  </div>
+</div>
+
 <div class="container-fluid my-background">
   <div class="row">
 
     <div class="col-sm" id="dishes">
-      <h3 class="text-dark">Recipe Cards</h3>
       <%= for dish <- @dishes do %>
         <div class="card border-primary mb-3" style="max-width: 18rem;"
              data-dish-id="<%= dish.id %>" data-toggle="modal" data-target="#exampleModal">
@@ -15,7 +28,6 @@
     </div>
 
     <div class="col-sm" id="meals">
-      <h3 class="text-dark">Weekly Plan</h3>
       <%= for meal <- @meals do %>
         <div class="card border-primary mb-3" style="max-width: 18rem;"
           data-dish-id="<%= meal.id %>" data-toggle="modal" data-target="#exampleModal">
@@ -27,7 +39,6 @@
     </div>
 
     <div class="col-sm">
-      <h3 class="text-dark">Shopping List</h3>
         <div class="card border-primary mb-3" style="max-width: 18rem;">
           <div class="card-body" id="shopping_list">
             <%= for task <- @shopping_list do %>

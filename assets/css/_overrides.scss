@@ -1,3 +1,8 @@
 .my-background {
-  background: #c9d8f2 !important;
+  // background: #c9d8f2 !important;
+  background: url(/images/ingredients.jpg) no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
 }
