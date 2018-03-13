@@ -4,20 +4,22 @@ defmodule Materials.Section do
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Materials.{Repo, RecipeCard}
+  alias Materials.{Repo, Card, Box}
 
   @derive {Poison.Encoder, except: [:__meta__]}
 
   schema "sections" do
     field(:name)
 
-    has_many(:recipe_cards, RecipeCard)
+    has_many(:cards, Card)
+    belongs_to(:box, Box)
 
     timestamps()
   end
 
   def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name])
+    |> cast(params, [:name, :box_id])
+    |> cast_assoc(:box)
   end
 end

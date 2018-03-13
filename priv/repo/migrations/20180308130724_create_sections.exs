@@ -4,6 +4,7 @@ defmodule Materials.Repo.Migrations.CreateSections do
   def change do
     create table(:sections) do
       add(:name, :string)
+      add(:box_id, references(:boxes, on_delete: :delete_all))
 
       timestamps()
     end

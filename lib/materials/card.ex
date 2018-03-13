@@ -1,21 +1,21 @@
-defmodule Materials.RecipeCard do
+defmodule Materials.Card do
   use Ecto.Schema
 
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Materials.{Repo, Ingredient}
+  alias Materials.{Repo, Ingredient, Section}
 
   @derive {Poison.Encoder, except: [:__meta__]}
 
-  schema "recipe_cards" do
+  schema "cards" do
     field(:name)
     field(:body)
 
     many_to_many(
       :ingredients,
       Ingredient,
-      join_through: "recipe_cards_dishes",
+      join_through: "cards_ingredients",
       on_replace: :delete
     )
 
@@ -24,12 +24,12 @@ defmodule Materials.RecipeCard do
     timestamps()
   end
 
-  def changeset(struct, %{section: section} = params \\ %{}) do
+  def changeset(struct, params \\ %{}) do
     struct
-    |> cast(params, [:name, :body])
+    |> cast(params, [:name, :body, :section_id])
     |> unique_constraint(:name)
     |> put_assoc(:ingredients, parse_ingredients(params))
-    |> put_assoc(:section, section)
+    |> cast_assoc(:section)
   end
 
   def parse_ingredients(params) do
@@ -51,6 +51,7 @@ defmodule Materials.RecipeCard do
           name: name,
           inserted_at: DateTime.utc_now(),
           updated_at: DateTime.utc_now(),
+          # TODO: Just no
           location: "Kroger"
         }
       end)

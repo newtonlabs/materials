@@ -6,8 +6,6 @@ defmodule Materials.Repo.Migrations.CreateIngredients do
       add(:name, :string)
       add(:location, :string)
       add(:frequency, :string)
-      add(:section_id, references(:sections, on_delete: :delete_all))
-      add(:table_id, references(:tables, on_delete: :delete_all))
 
       timestamps()
     end
