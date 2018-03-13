@@ -2,7 +2,7 @@
   <div class="row">
 
     <div class="col-sm" id="dishes">
-      <h3 class="text-dark">Dishes</h3>
+      <h3 class="text-dark">Recipe Cards</h3>
       <%= for dish <- @dishes do %>
         <div class="card border-primary mb-3" style="max-width: 18rem;"
              data-dish-id="<%= dish.id %>" data-toggle="modal" data-target="#exampleModal">
@@ -17,11 +17,9 @@
     <div class="col-sm" id="meals">
       <h3 class="text-dark">Weekly Plan</h3>
       <%= for meal <- @meals do %>
-        <div class="card border-primary mb-3" style="max-width: 18rem;"  data-dish-id="<%= meal.id %>">
+        <div class="card border-primary mb-3" style="max-width: 18rem;"
+          data-dish-id="<%= meal.id %>" data-toggle="modal" data-target="#exampleModal">
           <div class="card-body grabbable">
-            <button type="button" class="close" aria-label="Close"> 
-              <span aria-hidden="true">&times;</span>
-            </button>
             <p class="card-title text-dark"><%= meal.name %> </p>
           </div>
         </div>
