@@ -11,5 +11,6 @@ defmodule Materials.Users do
   def data_dump do
     get_first_user_first_box
     |> Repo.preload(sections: [cards: :ingredients])
+    |> Repo.preload(:user)
   end
 end
