@@ -7,4 +7,9 @@ defmodule Materials.Users do
     user = List.first(Repo.all(User) |> Repo.preload(:boxes))
     List.first(user.boxes)
   end
+
+  def data_dump do
+    get_first_user_first_box
+    |> Repo.preload(sections: [cards: :ingredients])
+  end
 end
