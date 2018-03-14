@@ -2,11 +2,11 @@ require IEx
 
 defmodule MaterialsTest do
   use Materials.DataCase
-  alias Materials.{Boxes, Card, Cards, Sections}
+  alias Materials.{Card, Cards, Sections}
 
   describe "cards" do
     @card_attrs %{name: "card name", ingredients: "a,b,c"}
-    @box_attrs %{name: "box name"}
+    # @box_attrs %{name: "box name"}
     @section_attrs %{name: "section name"}
 
     def card_fixture(attrs \\ %{}) do

@@ -24,7 +24,7 @@ defmodule Materials.Card do
     timestamps()
   end
 
-  def changeset(struct, %{section_id: section_id, name: name} = params \\ %{}) do
+  def changeset(struct, %{section_id: _section_id, name: _name} = params) do
     struct
     |> cast(params, [:name, :body, :section_id])
     |> unique_constraint(:name)
@@ -32,7 +32,7 @@ defmodule Materials.Card do
     |> cast_assoc(:section)
   end
 
-  def changeset(struct, %{section_id: section_id} = params) do
+  def changeset(struct, %{section_id: _section_id} = params) do
     struct
     |> cast(params, [:section_id])
     |> cast_assoc(:section)

@@ -3,7 +3,7 @@ require IEx
 
 defmodule MaterialsWeb.RoomChannel do
   use Phoenix.Channel
-  alias Materials.{Boxes, Cards, Repo, Box, Users}
+  alias Materials.{Cards, Users}
 
   def join("room:lobby", _message, socket) do
     {:ok, %{}, socket}
@@ -15,7 +15,7 @@ defmodule MaterialsWeb.RoomChannel do
   end
 
   def handle_in("section:" <> section_id, %{"card_id" => card_id}, socket) do
-    {:ok, card} =
+    {:ok, _card} =
       Cards.get_card!(card_id)
       |> Cards.update_card(%{section_id: section_id})
 
@@ -23,7 +23,7 @@ defmodule MaterialsWeb.RoomChannel do
     {:noreply, socket}
   end
 
-  def handle_in("cards:" <> card_id, payload, socket) do
+  def handle_in("cards:" <> card_id, _payload, socket) do
     resp =
       card_id
       |> String.to_integer()

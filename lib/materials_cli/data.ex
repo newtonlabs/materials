@@ -3,16 +3,15 @@ require IEx
 defmodule MaterialsCli.Data do
   NimbleCSV.define(MyParser, separator: "\t", escape: "\"")
 
-  alias Materials.{Cards, Boxes, Ingredients, Wunderlist, Repo}
-  alias Materials.{Card, Box, Ingredient}
+  alias Materials.{Cards, Ingredients, Repo}
+  alias Materials.{Card, Ingredient}
 
   def load_board_from_csv(section) do
     clean_up()
 
-    errors =
-      []
-      |> add_ingredients()
-      |> add_cards(section)
+    []
+    |> add_ingredients()
+    |> add_cards(section)
   end
 
   def clean_up() do

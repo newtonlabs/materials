@@ -3,9 +3,7 @@ require IEx
 defmodule Materials.Box do
   use Ecto.Schema
 
-  import Ecto.Query
-
-  alias Materials.{Repo, Card, Section, User}
+  alias Materials.{Section, User}
   alias Ecto.Changeset
 
   @derive {Poison.Encoder, except: [:__meta__, :user]}
@@ -19,14 +17,14 @@ defmodule Materials.Box do
     timestamps()
   end
 
-  def changeset(struct, params \\ %{}) do
+  def changeset(struct, params) do
     struct
     |> Changeset.cast(params, [:name, :user_id])
     |> Changeset.cast_assoc(:user)
   end
 
-  def changeset(struct, %{name: name} = params) do
-    struct
-    |> Changeset.cast(params, [:name])
-  end
+  # def changeset(struct, %{name: name} = params) do
+  #   struct
+  #   |> Changeset.cast(params, [:name])
+  # end
 end

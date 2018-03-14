@@ -1,6 +1,6 @@
 defmodule Materials.Users do
   import Ecto.Query, warn: false
-  alias Materials.{Repo, Box, User}
+  alias Materials.{Repo, User}
 
   # TODO Temporary while hacking
   def get_first_user_first_box() do
@@ -9,7 +9,7 @@ defmodule Materials.Users do
   end
 
   def data_dump do
-    get_first_user_first_box
+    get_first_user_first_box()
     |> Repo.preload(sections: [cards: :ingredients])
   end
 end

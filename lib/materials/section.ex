@@ -2,9 +2,8 @@ defmodule Materials.Section do
   use Ecto.Schema
 
   import Ecto.Changeset
-  import Ecto.Query
 
-  alias Materials.{Repo, Card, Box}
+  alias Materials.{Card, Box}
 
   @derive {Poison.Encoder, except: [:__meta__, :box]}
 
