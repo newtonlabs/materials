@@ -6,7 +6,7 @@ defmodule Materials.Section do
 
   alias Materials.{Repo, Card, Box}
 
-  @derive {Poison.Encoder, except: [:__meta__]}
+  @derive {Poison.Encoder, except: [:__meta__, :box]}
 
   schema "sections" do
     field(:name)

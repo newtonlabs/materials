@@ -8,7 +8,7 @@ defmodule Materials.Box do
   alias Materials.{Repo, Card, Section, User}
   alias Ecto.Changeset
 
-  @derive {Poison.Encoder, except: [:__meta__]}
+  @derive {Poison.Encoder, except: [:__meta__, :user]}
 
   schema "boxes" do
     field(:name)

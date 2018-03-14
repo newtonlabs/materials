@@ -6,7 +6,7 @@ defmodule Materials.Card do
 
   alias Materials.{Repo, Ingredient, Section}
 
-  @derive {Poison.Encoder, except: [:__meta__]}
+  @derive {Poison.Encoder, except: [:__meta__, :section]}
 
   schema "cards" do
     field(:name)
@@ -24,11 +24,17 @@ defmodule Materials.Card do
     timestamps()
   end
 
-  def changeset(struct, params \\ %{}) do
+  def changeset(struct, %{section_id: section_id, name: name} = params \\ %{}) do
     struct
     |> cast(params, [:name, :body, :section_id])
     |> unique_constraint(:name)
     |> put_assoc(:ingredients, parse_ingredients(params))
+    |> cast_assoc(:section)
+  end
+
+  def changeset(struct, %{section_id: section_id} = params) do
+    struct
+    |> cast(params, [:section_id])
     |> cast_assoc(:section)
   end
 
