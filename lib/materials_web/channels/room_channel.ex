@@ -19,7 +19,7 @@ defmodule MaterialsWeb.RoomChannel do
       Cards.get_card!(card_id)
       |> Cards.update_card(%{section_id: section_id})
 
-    broadcast!(socket, "cards", Users.data_dump())
+    broadcast!(socket, "cards", %{shopping_list: Users.shopping_list()})
     {:noreply, socket}
   end
 

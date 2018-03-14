@@ -19,7 +19,7 @@ channel.join()
 
 // Update the ingredients when card changes arrive on the channel
 channel.on("cards", payload => {
-  // updateShoppingList(payload);
+  updateShoppingList(payload);
 
   // TODO Make this smarter
   // updateSections(payload.sections[0])
@@ -36,26 +36,26 @@ dragula([document.querySelector('#recipe-box'), document.querySelector('#this-we
  * Dynamically update the DOM based on data from the channel listeners
  */
 function updateShoppingList(data) {
-  // let ingredients = d3.select("#shopping-list")
-  //   .selectAll("p")
-  //   .data(data.list, (d) => (d && d.key)) // TODO fix this with data api
-  //
-  // ingredients.enter()
-  //   .append("p")
-  //     .attr('class', 'card-text text-dark')
-  //   .merge(ingredients)
-  //     .text((d) => d.name);
-  //
-  // ingredients.exit().remove();
+  let shoppingList = d3.select("#shopping-list")
+    .selectAll("p")
+    .data(data.shopping_list, (d) => (d && d.key)) // TODO fix this with data api
+
+  shoppingList.enter()
+    .append("p")
+      .attr('class', 'card-text text-dark')
+    .merge(shoppingList)
+      .text((d) => d.name);
+
+  shoppingList.exit().remove();
 }
 
 function updateSections(data) {
   // debugger;
   // let thisWeek = d3.select("#this-week")
-  let id = 1;
-  let select = `[data-section-id='${id}']`;
-  let thisWeek = d3.select(select);
-  console.log(thisWeek);
+  // let id = 1;
+  // let select = `[data-section-id='${id}']`;
+  // let thisWeek = d3.select(select);
+  // console.log(thisWeek);
   // let thisWeek = d3.select("[data-section-id='2']")
   //   .selectAll("div.card")
   //   .data(data.cards, function(d) {return (d && d.id) || this.dataset.cardId;});

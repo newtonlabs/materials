@@ -12,7 +12,7 @@ defmodule MaterialsWeb.PageController do
 
     # Today this is only one section of planned, future could be everything
     # minus recipe_box
-    shopping_list = Boxes.shopping_list([this_week])
+    shopping_list = Users.shopping_list(this_week)
 
     render(
       conn,
