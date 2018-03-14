@@ -1,7 +1,7 @@
 defmodule MaterialsWeb.PageController do
   use MaterialsWeb, :controller
 
-  alias Materials.{Boxes, Users}
+  alias Materials.{Users}
 
   def index(conn, _params) do
     # TODO making filler assumptions for 1 user and dumping all data,
