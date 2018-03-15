@@ -3,7 +3,7 @@ require IEx
 
 defmodule MaterialsWeb.RoomChannel do
   use Phoenix.Channel
-  alias Materials.{Dishes, Meals, Repo, Meal}
+  alias Materials.{Cards, Users}
 
   def join("room:lobby", _message, socket) do
     {:ok, %{}, socket}
@@ -14,49 +14,31 @@ defmodule MaterialsWeb.RoomChannel do
     {:error, %{reason: "unauthorized"}}
   end
 
-  def handle_in("dish", %{"action" => "add", "id" => id}, socket) do
-    dish = Dishes.get_dish!(id)
-    meal = get_meal()
+  def handle_in("section:" <> section_id, %{"card_id" => card_id}, socket) do
+    {:ok, _card} =
+      Cards.get_card!(card_id)
+      |> Cards.update_card(%{section_id: section_id})
 
-    {:ok, meal} = Meals.update_meal(meal, %{dishes: [dish] ++ meal.dishes})
-
-    broadcast!(socket, "dish", shopping_list())
+    broadcast!(socket, "cards", %{shopping_list: Users.shopping_list()})
     {:noreply, socket}
   end
 
-  def handle_in("dish", %{"action" => "remove", "id" => id}, socket) do
-    meal = get_meal()
-
-    dishes =
-      meal.dishes
-      |> Enum.filter(&("#{&1.id}" != id))
-
-    {:ok, meal} = Meals.update_meal(meal, %{dishes: dishes})
-
-    broadcast!(socket, "dish", shopping_list())
-    {:noreply, socket}
-  end
-
-  def handle_in("dish:" <> dish_id, payload, socket) do
+  def handle_in("cards:" <> card_id, _payload, socket) do
     resp =
-      dish_id
+      card_id
       |> String.to_integer()
-      |> Dishes.get_dish!()
+      |> Cards.get_card!()
 
     {:reply, {:ok, resp}, socket}
   end
 
-  def get_meal do
-    List.first(Repo.all(Meal)) |> Repo.preload([:dishes])
-  end
-
-  def shopping_list do
-    # TODO this is broken, need to get the specfic meal and fix this
-    meal = List.first(Meals.list_meals())
-
-    %{
-      list: Meals.shopping_list([meal]),
-      dishes: meal.dishes
-    }
-  end
+  # def shopping_list do
+  #   # TODO this is broken, need to get the specfic meal and fix this
+  #   meal = List.first(Meals.list_meals())
+  #
+  #   %{
+  #     list: Meals.shopping_list([meal]),
+  #     dishes: meal.dishes
+  #   }
+  # end
 end

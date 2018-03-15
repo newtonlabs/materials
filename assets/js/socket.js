@@ -17,56 +17,64 @@ channel.join()
     console.log("Unable to join", resp)
   })
 
-// Update the ingredients when dish changes arrive on the channel
-channel.on("dish", payload => {
-  updateIngredients(payload);
-  updatePlan(payload)
+// Update the ingredients when card changes arrive on the channel
+channel.on("cards", payload => {
+  updateShoppingList(payload);
+
+  // TODO Make this smarter
+  // updateSections(payload.sections[0])
+  // updateSections(payload.sections[1])
 })
 
 /*
  * Configure the Drag and Drop features
  */
-dragula([document.querySelector('#dishes'), document.querySelector('#meals')])
+dragula([document.querySelector('#recipe-box'), document.querySelector('#this-week')])
 .on('drop', function (card, container) { cardAction(card, container); });
-
 
 /*
  * Dynamically update the DOM based on data from the channel listeners
  */
-function updateIngredients(data) {
-  let ingredients = d3.select("#shopping_list")
+function updateShoppingList(data) {
+  let shoppingList = d3.select("#shopping-list")
     .selectAll("p")
-    .data(data.list, (d) => (d && d.key)) // TODO fix this with data api
+    .data(data.shopping_list, (d) => (d && d.key)) // TODO fix this with data api
 
-  ingredients.enter()
+  shoppingList.enter()
     .append("p")
       .attr('class', 'card-text text-dark')
-    .merge(ingredients)
+    .merge(shoppingList)
       .text((d) => d.name);
 
-  ingredients.exit().remove();
+  shoppingList.exit().remove();
 }
 
-function updatePlan(data) {
-  let dishes = d3.select("#meals")
-    .selectAll("div.card")
-    .data(data.dishes, function(d) {return (d && d.id) || this.dataset.dishId;});
-
-  dishes.enter()
-    .append("div")
-      .attr('class', 'card border-primary mb-3')
-      .attr('style', 'max-width: 18rem;')
-      .attr('data-dish-id', (d) => d.id)
-    .merge(dishes)
-    .html(function(d) { return htmlCard(d) });
-
-  dishes.exit().remove();
+function updateSections(data) {
+  // debugger;
+  // let thisWeek = d3.select("#this-week")
+  // let id = 1;
+  // let select = `[data-section-id='${id}']`;
+  // let thisWeek = d3.select(select);
+  // console.log(thisWeek);
+  // let thisWeek = d3.select("[data-section-id='2']")
+  //   .selectAll("div.card")
+  //   .data(data.cards, function(d) {return (d && d.id) || this.dataset.cardId;});
+  //
+  // thisWeek.enter()
+  //   .append("div")
+  //     .attr('class', 'card border-primary mb-1')
+  //     .attr('style', 'max-width: 18rem;')
+  //     .attr('data-card-id', (d) => d.id)
+  //   .merge(thisWeek)
+  //   .html(function(d) { return htmlCard(d) });
+  //
+  // thisWeek.exit().remove();
 }
 
-function htmlCard(meal) {
+function htmlCard(card) {
   return `
     <div class="card-body grabbable">
-      <p class="card-title text-dark">${meal.name}</p>
+      <p class="card-title text-dark">${card.name}</p>
     </div>
   `
 }
@@ -74,25 +82,21 @@ function htmlCard(meal) {
  * Send messages to the channel based on drag and drop actions
  */
 function cardAction(card, container) {
-  if (container.id === "dishes") {
-    channel.push("dish", dishPayload("remove", card));
-  }
-  if (container.id === "meals") {
-    channel.push("dish", dishPayload("add", card));
-  }
-}
+  let cardId = card.dataset.cardId;
+  let sectionId = container.dataset.sectionId;
 
-const dishPayload = (action, card) => ({ action: action, id: card.dataset.dishId })
+  channel.push("section:" + sectionId, {card_id: cardId})
+}
 
 /*
  * Modal stuff
  */
 $('#exampleModal').on('show.bs.modal', function (event) {
   let click = $(event.relatedTarget);
-  let id = click.data('dish-id');
+  let id = click.data('card-id');
   let modal = $(this);
 
-  channel.push(`dish:${id}`)
+  channel.push(`cards:${id}`)
     .receive("ok", (reply) => {
       modal.find('.modal-title').text(reply.name);
       modal.find('.modal-body').html(composeIngredients(reply.ingredients));

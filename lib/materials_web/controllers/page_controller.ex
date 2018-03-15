@@ -1,25 +1,25 @@
 defmodule MaterialsWeb.PageController do
   use MaterialsWeb, :controller
 
-  alias Materials.{Dishes, Meals, Repo, Meal, Dish}
+  alias Materials.{Users}
 
   def index(conn, _params) do
-    # TODO Hacking to prove out concept
+    # TODO making filler assumptions for 1 user and dumping all data,
+    # these queries should be made much more efficient
+    users_box = Users.data_dump()
+    this_week = Enum.find(users_box.sections, &(&1.name == "This Week"))
+    recipe_box = Enum.find(users_box.sections, &(&1.name == "Recipe Box"))
 
-    planned = Repo.all(Meal) |> Repo.preload(:dishes) |> List.first()
-    planned = planned.dishes
-
-    all_dishes = Repo.all(Dish)
-    all_dishes = all_dishes -- planned
-
-    shopping_list = Meals.list_meals() |> Meals.shopping_list()
+    # Today this is only one section of planned, future could be everything
+    # minus recipe_box
+    shopping_list = Users.shopping_list(this_week)
 
     render(
       conn,
       "index.html",
-      dishes: all_dishes,
-      shopping_list: shopping_list,
-      meals: planned
+      recipe_box: recipe_box,
+      this_week: this_week,
+      shopping_list: shopping_list
     )
   end
 end

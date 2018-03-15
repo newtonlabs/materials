@@ -1,32 +1,41 @@
-defmodule Materials.Dish do
+defmodule Materials.Card do
   use Ecto.Schema
 
   import Ecto.Changeset
   import Ecto.Query
 
-  alias Materials.{Repo, Ingredient}
+  alias Materials.{Repo, Ingredient, Section}
 
-  @derive {Poison.Encoder, except: [:__meta__]}
+  @derive {Poison.Encoder, except: [:__meta__, :section]}
 
-  schema "dishes" do
+  schema "cards" do
     field(:name)
     field(:body)
 
     many_to_many(
       :ingredients,
       Ingredient,
-      join_through: "dishes_ingredients",
+      join_through: "cards_ingredients",
       on_replace: :delete
     )
+
+    belongs_to(:section, Section)
 
     timestamps()
   end
 
-  def changeset(struct, params \\ %{}) do
+  def changeset(struct, %{section_id: _section_id, name: _name} = params) do
     struct
-    |> cast(params, [:name, :body])
+    |> cast(params, [:name, :body, :section_id])
     |> unique_constraint(:name)
     |> put_assoc(:ingredients, parse_ingredients(params))
+    |> cast_assoc(:section)
+  end
+
+  def changeset(struct, %{section_id: _section_id} = params) do
+    struct
+    |> cast(params, [:section_id])
+    |> cast_assoc(:section)
   end
 
   def parse_ingredients(params) do
@@ -48,6 +57,7 @@ defmodule Materials.Dish do
           name: name,
           inserted_at: DateTime.utc_now(),
           updated_at: DateTime.utc_now(),
+          # TODO: Just no
           location: "Kroger"
         }
       end)
