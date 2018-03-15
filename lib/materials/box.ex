@@ -22,9 +22,4 @@ defmodule Materials.Box do
     |> Changeset.cast(params, [:name, :user_id])
     |> Changeset.cast_assoc(:user)
   end
-
-  # def changeset(struct, %{name: name} = params) do
-  #   struct
-  #   |> Changeset.cast(params, [:name])
-  # end
 end
