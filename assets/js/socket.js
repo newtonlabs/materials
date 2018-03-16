@@ -97,15 +97,64 @@ $('#exampleModal').on('show.bs.modal', function (event) {
   let modal = $(this);
 
   channel.push(`cards:${id}`)
-    .receive("ok", (reply) => {
-      modal.find('.modal-title').text(reply.name);
-      modal.find('.modal-body').html(composeIngredients(reply.ingredients));
-    })
+    .receive("ok", (card) => buildModal(modal, card))
 })
 
-function composeIngredients(ingredients) {
-  let iStr = ingredients.reduce((acc, val) => acc + `<li>${val.name}</li>`, "")
-  return `<ul>${iStr}</ul>`
+function buildModal(modal, card) {
+  modal.find('.modal-body').html(modalTemplate(card));
+
+  let inputIngredient = document.querySelector("#inputIngredient");
+
+  inputIngredient.addEventListener("keypress", event => {
+    if(event.keyCode === 13){
+      console.log('here',inputIngredient.value);
+      // channel.push("new_msg", {body: chatInput.value})
+      // chatInput.value = ""
+    }
+  })
 }
+
+function modalTemplate (card) {
+  return `<form>
+    <div class="form-group row">
+      <label for="cardName" class="col-sm-2 col-form-label">Name</label>
+      <div class="col-sm-10">
+        <input type="name" class="form-control" id="inputName" placeholder="${card.name || "Name"} "></input>
+      </div>
+    </div>
+    <div class="form-group row">
+      <label for="inputSteps" class="col-sm-2 col-form-label">Steps</label>
+      <div class="col-sm-10">
+        <textarea class="form-control" id="inputSteps" placeholder="${card.description || "Steps..."}" rows="7"></textarea>
+      </div>
+    </div>
+    <fieldset class="form-group">
+      <div class="row">
+        <legend class="col-form-label col-sm-2 pt-0">Ingredients</legend>
+        <div class="col-sm-10">
+          <ul class="list-group">
+            ${composeIngredients(card.ingredients)}
+          </ul>
+          <input type="ingredient" class="form-control mt-2" id="inputIngredient" placeholder="Use: Name @ location">
+        </div>
+      </div>
+    </fieldset>
+  </form>`
+}
+
+function composeIngredients(ingredients) {
+  return ingredients.reduce((acc, val) => acc + ingredientTemplate(val), "")
+}
+
+function ingredientTemplate(ingredient) {
+  return `
+  <li class="list-group-item">
+    <span class="badge badge-secondary">${ingredient.location}</span>
+    ${ingredient.name}
+    <button type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+  </li>
+  `
+}
+
 
 export default socket

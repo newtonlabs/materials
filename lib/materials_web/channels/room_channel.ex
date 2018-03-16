@@ -27,7 +27,7 @@ defmodule MaterialsWeb.RoomChannel do
     resp =
       card_id
       |> String.to_integer()
-      |> Cards.get_card!()
+      |> Cards.get_full_card!()
 
     {:reply, {:ok, resp}, socket}
   end

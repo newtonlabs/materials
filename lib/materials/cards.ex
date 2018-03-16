@@ -15,7 +15,7 @@ defmodule Materials.Cards do
   end
 
   def get_card!(id), do: Repo.get!(Card, id)
-  # def get_card!(id), do: Repo.get!(Card, id) |> Repo.preload([:ingredients])
+  def get_full_card!(id), do: Repo.get!(Card, id) |> Repo.preload([:ingredients])
 
   def list_card() do
     Repo.all(Card) |> Repo.preload(:ingredients)
