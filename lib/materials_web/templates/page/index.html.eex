@@ -1,4 +1,4 @@
-<div class="container-fluid bg-dark">
+<!-- <div class="container-fluid bg-dark">
   <div class="row">
     <div class="col-sm">
       <h3 class="text-light">Recipe Cards</h3>
@@ -10,14 +10,14 @@
       <h3 class="text-light">Shopping List</h3>
     </div>
   </div>
-</div>
+</div> -->
 
 <div class="container-fluid my-background">
   <div class="row">
 
-    <div class="col-sm" id="recipe-box" data-section-id="<%= @recipe_box.id %>">
+    <div class="col my-sidebar" id="recipe-box" data-section-id="<%= @recipe_box.id %>">
       <%= for card <- @recipe_box.cards do %>
-        <div class="card border-dark mb-1" style="max-width: 18rem;"
+        <div class="card border-dark mb-1 mt-1" style="max-width: 18rem;"
              data-card-id="<%= card.id %>" data-toggle="modal" data-target="#exampleModal">
           <div class="card-body grabbable" >
             <p class="card-title text-dark"><%= card.name %> </p>
@@ -27,9 +27,9 @@
       <p> Add Item </p>
     </div>
 
-    <div class="col-sm" id="this-week" data-section-id="<%= @this_week.id %>">
+    <div class="col my-sidebar" id="this-week" data-section-id="<%= @this_week.id %>">
       <%= for card <- @this_week.cards do %>
-        <div class="card border-dark mb-1" style="max-width: 18rem;"
+        <div class="card border-dark mb-1 mt-1" style="max-width: 18rem;"
           data-card-id="<%= card.id %>" data-toggle="modal" data-target="#exampleModal">
           <div class="card-body grabbable">
             <p class="card-title text-dark"><%= card.name %> </p>
@@ -38,8 +38,8 @@
       <% end %>
     </div>
 
-    <div class="col-sm">
-        <div class="card border-dark mb-1" style="max-width: 18rem;">
+    <div class="col my-sidebar">
+        <div class="card border-dark mb-1 mt-1" style="max-width: 18rem;">
           <div class="card-body" id="shopping-list">
             <%= for task <- @shopping_list do %>
             <p class="card-text text-dark" data-ingredient="<%= task.id %>"> <%= task.name %> </p>
@@ -56,17 +56,49 @@
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
       <div class="modal-body">
-        ...
+        <form>
+          <div class="form-group row">
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Name</label>
+            <div class="col-sm-10">
+              <input type="email" class="form-control" id="inputEmail3" placeholder="Card name">
+            </div>
+          </div>
+          <div class="form-group row">
+            <label for="inputPassword3" class="col-sm-2 col-form-label">Steps</label>
+            <div class="col-sm-10">
+              <textarea class="form-control" id="exampleFormControlTextarea1" placeholder="Steps to create..." rows="7"></textarea>
+            </div>
+          </div>
+          <fieldset class="form-group">
+            <div class="row">
+              <legend class="col-form-label col-sm-2 pt-0">Ingredients</legend>
+              <div class="col-sm-10">
+                <ul class="list-group">
+                  <li class="list-group-item">
+                    Cras justo odio
+                    <span class="badge badge-secondary">Publix</span>
+                    <button type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                  </li>
+                  <li class="list-group-item">
+                    Dapibus ac facilisis in
+                    <span class="badge badge-secondary">Whole Foods</span>
+                    <button type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                  </li>
+                  <li class="list-group-item">
+                    Morbi leo risus
+                    <span class="badge badge-secondary">Kroger</span>
+                    <button type="button" class="close" aria-label="Close"> <span aria-hidden="true">&times;</span> </button>
+                  </li>
+                </ul>
+                <input type="email" class="form-control mt-2" id="inputEmail3" placeholder="Add ingredient">
+              </div>
+            </div>
+          </fieldset>
+        </form>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-success" data-dismiss="modal">Save</button>
         <button type="button" class="btn btn-primary">Share Dish</button>
       </div>
     </div>
