@@ -12,6 +12,9 @@
                 <p class="mb-0"><%= card.name %></p>
             </div>
           <% end %>
+          <div class="card border-light bg-light p-2 mb-0">
+            <h6> Add a card... </h6>
+          </div>
         </div>
       </div>
     </div>
@@ -48,6 +51,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog"
-     aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+  </div>
 </div>

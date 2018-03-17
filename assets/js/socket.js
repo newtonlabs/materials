@@ -99,47 +99,49 @@ $('#myModal').on('hide.bs.modal', function (e) {
 })
 
 function buildModal(modal, card) {
-  modal.find('.modal').html(modalTemplate(card));
-  debugger;
-  //
-  // let inputIngredient = document.querySelector("#inputIngredient");
-  // let cardFrom = document.querySelector("#cardForm");
-  // let id = card.id
-  //
-  // inputIngredient.addEventListener("keypress", event => {
-  //   if(event.keyCode === 13){
-  //     channel.push("add_ingredient:" + id, {name: inputIngredient.value, card_id: id})
-  //     .receive("ok", function(card) {
-  //       inputIngredient.value = "";
-  //       updateCardIngredients(id, card);
-  //     })
-  //   }
-  // })
-  //
-  //
-  // $('#cardSave').on('click', function (e) {
-  //   let name = document.querySelector("#inputName").value;
-  //   let id = document.querySelector("#cardSave").dataset.cardId;
-  //   let description = document.querySelector("#inputSteps").value;
-  //
-  //   let payload = {
-  //     name: name,
-  //     body: description
-  //   }
-  //
-  //   channel.push(`update_card:${id}`, payload)
-  //     .receive("error", (card) => console.log("something broke"))
-  // })
+  modal.find('.modal-dialog').html(modalTemplate(card));
 
-  // $('.remove-ingredient').on('click', function(e) {
-  //   channel.push(`remove_ingredient:${id}`, {name: e.target.dataset.ingredientName})
-  //     .receive("ok", (card) => updateCardIngredients(id, card))
-  // });
+  let inputIngredient = document.querySelector("#inputIngredient");
+  let cardFrom = document.querySelector("#cardForm");
+  let id = card.id
+
+  inputIngredient.addEventListener("keypress", event => {
+    if(event.keyCode === 13){
+      channel.push("add_ingredient:" + id, {name: inputIngredient.value, card_id: id})
+      .receive("ok", function(card) {
+        inputIngredient.value = "";
+        updateCardIngredients(id, card);
+      })
+    }
+  })
+
+
+  $('#cardSave').on('click', function (e) {
+    let name = document.querySelector("#inputName").value;
+    let id = document.querySelector("#cardSave").dataset.cardId;
+    let description = document.querySelector("#inputSteps").value;
+
+    let payload = {
+      name: name,
+      body: description
+    }
+
+    channel.push(`update_card:${id}`, payload)
+      .receive("error", (card) => console.log("something broke"))
+  })
+
+  $('.remove-ingredient').on('click', function(e) {
+    channel.push(`remove_ingredient:${id}`, {name: e.target.dataset.ingredientName})
+      .receive("ok", (card) => updateCardIngredients(id, card))
+  });
 }
 
 function modalTemplate (card) {
   return `<div class="modal-dialog modal-lg" role="document">
       <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modal-label">Recipe Card</h5>
+        </div>
         <div class="modal-body">
           <form id="cardForm">
             <div class="form-group row">
