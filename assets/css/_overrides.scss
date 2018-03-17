@@ -6,10 +6,6 @@
   -o-background-size: cover;
   background-size: cover;
 }
-.my-sidebar {
-  -ms-flex: 0 0 230px;
-  flex: 0 0 300px;
-}
 
 html {
     font-size: 14px;
@@ -39,7 +35,4 @@ html {
 .bg-dark{
   background-color:#343a40!important;
   opacity: 0.9;
-}
-.bg-primary{
-  background-color:#007bff!important;
 }

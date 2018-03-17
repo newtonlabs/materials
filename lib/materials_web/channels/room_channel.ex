@@ -23,12 +23,44 @@ defmodule MaterialsWeb.RoomChannel do
     {:noreply, socket}
   end
 
+  def handle_in("update_card:" <> card_id, %{"body" => body, "name" => name}, socket) do
+    {:ok, resp} =
+      Cards.get_full_card!(card_id)
+      |> Cards.update_card(%{body: body, name: name})
+
+    {:reply, {:ok, resp}, socket}
+  end
+
   def handle_in("cards:" <> card_id, _payload, socket) do
     resp =
       card_id
       |> String.to_integer()
       |> Cards.get_full_card!()
 
+    {:reply, {:ok, resp}, socket}
+  end
+
+  def handle_in("add_ingredient:" <> card_id, %{"name" => name}, socket) do
+    card = Cards.get_full_card!(card_id)
+
+    # TODO Ugly Hack!
+    names = Enum.reduce(card.ingredients, "", fn val, acc -> acc <> val.name <> "," end) <> name
+    {:ok, resp} = Cards.update_card(card, %{ingredients: names})
+    broadcast!(socket, "cards", %{shopping_list: Users.shopping_list()})
+    {:reply, {:ok, resp}, socket}
+  end
+
+  def handle_in("remove_ingredient:" <> card_id, %{"name" => name}, socket) do
+    card = Cards.get_full_card!(card_id)
+
+    # TODO Ugly Hack!
+    names =
+      card.ingredients
+      |> Enum.filter(&(&1.name != name))
+      |> Enum.reduce("", fn val, acc -> acc <> val.name <> "," end)
+
+    {:ok, resp} = Cards.update_card(card, %{ingredients: names})
+    broadcast!(socket, "cards", %{shopping_list: Users.shopping_list()})
     {:reply, {:ok, resp}, socket}
   end
 

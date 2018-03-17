@@ -21,4 +21,15 @@ defmodule Materials.Ingredient do
     |> validate_inclusion(:frequency, ["barely", "sometimes", "often"])
     |> unique_constraint(:name)
   end
+
+  def parse_location(ingredient) do
+    String.split(ingredient, "@")
+    |> Enum.map(&String.trim/1)
+    |> Enum.reject(&(&1 == ""))
+    |> List.to_tuple()
+    |> apply_defaults()
+  end
+
+  def apply_defaults({name, location}), do: {name, location}
+  def apply_defaults({name}), do: {name, "Kroger"}
 end

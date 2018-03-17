@@ -84,6 +84,21 @@ defmodule MaterialsTest do
       assert card.id == fetched.id
     end
 
+    test "should get a location based on @ tag" do
+      section = section_fixture()
+
+      attrs =
+        @card_attrs
+        |> Enum.into(%{section_id: section.id})
+
+      assert {:ok, %Card{} = card} = Cards.create_card(attrs)
+      assert card.section_id == section.id
+      assert Enum.count(card.ingredients) == 3
+
+      # ingredients = %{ingredients: "item@location"}
+      # {:ok, card} = Cards.update_card(card, ingredients)
+    end
+
     # test "get_card/1 with gets the card and preloads" do
     #   card = full_fixture()
     #   fetched = Cards.get_card!(card.id)
