@@ -3,11 +3,10 @@ require IEx
 
 defmodule MaterialsWeb.RoomChannel do
   use Phoenix.Channel
-  alias Materials.{Cards, Users}
+  alias Materials.{Cards, Users, Ingredients}
 
   def join("room:lobby", _message, socket) do
     {:ok, %{}, socket}
-    # {:ok, shopping_list(), socket}
   end
 
   def join("room:" <> _private_room_id, _params, _socket) do
@@ -40,37 +39,28 @@ defmodule MaterialsWeb.RoomChannel do
     {:reply, {:ok, resp}, socket}
   end
 
-  def handle_in("add_ingredient:" <> card_id, %{"name" => name}, socket) do
+  def handle_in("add_ingredient:" <> card_id, %{"name" => components}, socket) do
+    # Check for new ingredients, create if necessary
+    {:ok, ingredient} = Ingredients.upsert_ingredient_from_components(components)
     card = Cards.get_full_card!(card_id)
 
-    # TODO Ugly Hack!
-    names = Enum.reduce(card.ingredients, "", fn val, acc -> acc <> val.name <> "," end) <> name
-    {:ok, resp} = Cards.update_card(card, %{ingredients: names})
+    # Remove any duplicates and update
+    ingredients = Enum.filter(card.ingredients, &(&1.name != ingredient.name))
+    {:ok, resp} = Cards.update_card(card, %{ingredients: ingredients ++ [ingredient]})
+
+    # Broadcast changes
     broadcast!(socket, "cards", %{shopping_list: Users.shopping_list()})
     {:reply, {:ok, resp}, socket}
   end
 
   def handle_in("remove_ingredient:" <> card_id, %{"name" => name}, socket) do
+    # Get the card and slim down the ingredients list
     card = Cards.get_full_card!(card_id)
+    ingredients = card.ingredients |> Enum.filter(&(&1.name != name))
+    {:ok, resp} = Cards.update_card(card, %{ingredients: ingredients})
 
-    # TODO Ugly Hack!
-    names =
-      card.ingredients
-      |> Enum.filter(&(&1.name != name))
-      |> Enum.reduce("", fn val, acc -> acc <> val.name <> "," end)
-
-    {:ok, resp} = Cards.update_card(card, %{ingredients: names})
+    # Broadcast
     broadcast!(socket, "cards", %{shopping_list: Users.shopping_list()})
     {:reply, {:ok, resp}, socket}
   end
-
-  # def shopping_list do
-  #   # TODO this is broken, need to get the specfic meal and fix this
-  #   meal = List.first(Meals.list_meals())
-  #
-  #   %{
-  #     list: Meals.shopping_list([meal]),
-  #     dishes: meal.dishes
-  #   }
-  # end
 end

@@ -22,8 +22,8 @@ defmodule Materials.Ingredient do
     |> unique_constraint(:name)
   end
 
-  def parse_location(ingredient) do
-    String.split(ingredient, "@")
+  def parse_components(components) do
+    String.split(components, "@")
     |> Enum.map(&String.trim/1)
     |> Enum.reject(&(&1 == ""))
     |> List.to_tuple()

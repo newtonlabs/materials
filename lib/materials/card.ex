@@ -39,10 +39,10 @@ defmodule Materials.Card do
     |> cast(params, [:name, :body])
   end
 
-  def changeset(struct, %{ingredients: _ingredients} = params) do
+  def changeset(struct, %{ingredients: ingredients} = _params) do
     struct
     |> change()
-    |> put_assoc(:ingredients, parse_ingredients(params))
+    |> put_assoc(:ingredients, ingredients)
   end
 
   def changeset(struct, %{section_id: _section_id} = params) do
@@ -66,7 +66,7 @@ defmodule Materials.Card do
   def insert_and_get_all(names) do
     maps =
       Enum.map(names, fn name ->
-        {ingredient_name, location} = Ingredient.parse_location(name)
+        {ingredient_name, location} = Ingredient.parse_components(name)
 
         %{
           name: ingredient_name,
