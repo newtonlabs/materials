@@ -1,3 +1,5 @@
+require IEx
+
 defmodule Materials.Card do
   use Ecto.Schema
 
@@ -32,6 +34,17 @@ defmodule Materials.Card do
     |> cast_assoc(:section)
   end
 
+  def changeset(struct, %{body: _body, name: _name} = params) do
+    struct
+    |> cast(params, [:name, :body])
+  end
+
+  def changeset(struct, %{ingredients: ingredients} = _params) do
+    struct
+    |> change()
+    |> put_assoc(:ingredients, ingredients)
+  end
+
   def changeset(struct, %{section_id: _section_id} = params) do
     struct
     |> cast(params, [:section_id])
@@ -53,14 +66,17 @@ defmodule Materials.Card do
   def insert_and_get_all(names) do
     maps =
       Enum.map(names, fn name ->
+        {ingredient_name, location} = Ingredient.parse_components(name)
+
         %{
-          name: name,
+          name: ingredient_name,
           inserted_at: DateTime.utc_now(),
           updated_at: DateTime.utc_now(),
-          # TODO: Just no
-          location: "Kroger"
+          location: location
         }
       end)
+
+    names = Enum.map(maps, & &1.name)
 
     Repo.insert_all(Ingredient, maps, on_conflict: :nothing)
     Repo.all(from(t in Ingredient, where: t.name in ^names))

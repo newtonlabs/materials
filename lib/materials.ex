@@ -8,24 +8,22 @@ defmodule Materials do
   """
 
   # Hard code for now
-  # alias Materials.{Wunderlist}
+  alias Materials.{Users, Wunderlist}
 
-  def main(_args) do
-    # args
-    # |> parse_args
-    # |> process
+  def main(args) do
+    args
+    |> parse_args
+    |> process
   end
 
-  #
-  # def process(options) do
-  #   Meals.list_meals()
-  #   |> Meals.shopping_list()
-  #   |> Enum.map(&Wunderlist.add_task(125_473_172, &1, options))
-  #   |> Enum.each(&IO.inspect(&1))
-  # end
-  #
-  # def parse_args(args) do
-  #   {options, _, _} = OptionParser.parse(args, switches: [commit: :boolean])
-  #   options
-  # end
+  def process(options) do
+    Users.shopping_list()
+    |> Enum.map(&Wunderlist.add_task(125_473_172, &1, options))
+    |> Enum.each(&IO.inspect(&1))
+  end
+
+  def parse_args(args) do
+    {options, _, _} = OptionParser.parse(args, switches: [commit: :boolean])
+    options
+  end
 end

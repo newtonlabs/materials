@@ -1,0 +1,21 @@
+<div class="container-fluid">
+  <div class="row flex-sm-nowrap py-3">
+    <div class="col-sm-4 col-md-3">
+      <div class="card">
+        <div class="card-body bg-light">
+          <h3 class="card-title">Category 1</h3>
+          <div class="card p-2 mb-2">
+              <h5 class="card-title">Item</h5>
+              <p>With supporting text below as a natural lead-in to additional content.</p>
+          </div>
+          <div class="card p-2 mb-2">
+              <p>With supporting text below as a natural lead-in to additional content.</p>
+          </div>
+          <div class="card p-2 mb-2">
+              <p>With supporting text below as a natural lead-in to additional content.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -34,8 +34,13 @@ defmodule MaterialsCli.Data do
     "data/cards.tsv"
     |> File.stream!()
     |> MyParser.parse_stream()
-    |> Stream.map(fn [dish_name, csv_ingredients] ->
-      Cards.create_card(%{name: dish_name, ingredients: csv_ingredients, section_id: section.id})
+    |> Stream.map(fn [dish_name, csv_ingredients, body] ->
+      Cards.create_card(%{
+        name: dish_name,
+        ingredients: csv_ingredients,
+        body: body,
+        section_id: section.id
+      })
     end)
     |> Enum.filter(fn {status, _} -> status == :error end)
     |> Enum.concat(errors)

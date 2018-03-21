@@ -6,3 +6,33 @@
   -o-background-size: cover;
   background-size: cover;
 }
+
+html {
+    font-size: 14px;
+}
+
+.navbar{
+  background:#F97300;
+}
+.nav-link , .navbar-brand{
+  color: #f4f4f4;
+  cursor: pointer;
+}
+.nav-link{
+  margin-right: 1em !important;
+}
+.nav-link:hover{
+  background: #f4f4f4;
+  color: #f97300;
+}
+.navbar-collapse{
+  justify-content: flex-end;
+}
+.navbar-toggler{
+  background:#fff !important;
+}
+
+.bg-dark{
+  background-color:#343a40!important;
+  opacity: 0.9;
+}
