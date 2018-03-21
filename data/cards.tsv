@@ -1,7 +1,7 @@
 name	ingredients	description
 Chicken Soup	"chicken thighs,carrots,onion,bell pepper,parsley,celery"	Boil the chicken until it is tender and the broth is yummy. Cut up the veggies like a mad person. Stir it all together
 Steak	"ribeye,filet"	
-Mexican Chicken	"chicken thighs,fajita seasoning"	
+Mexican Chicken	"chicken thighs,fajita seasoning, bell pepper, onion"	
 Arugula Salad	"lemon,olive oil,arugula"	
 Pork Chop	pork chop	
 Roasted Peppers	bell pepper	
@@ -20,3 +20,5 @@ Pork Tenderloin	"pork tenderloin, bbq rub, bulgarian seasoning"
 Brunswick Stew	"pulled pork, onions, peppers, garlic, stewed tomatoes, tomato sauce"	
 Red Snapper	"red snapper, salt, pepper, dill weed"	
 Roasted Fennel	"fennel, olive oil, salt, pepper, fresh dill"	
+Burgers	"ground meat, bacon, hamburger buns"	
+Eggplant	"eggplant, onion, garlic, parsley, diced tomatoes"	
